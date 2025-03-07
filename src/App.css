@@ -1,0 +1,25 @@
+.correction-container {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  max-width: 800px;
+  ;
+}
+
+.correction-item {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.correction-point {
+  background-color: #000;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-right: 8px;
+}
