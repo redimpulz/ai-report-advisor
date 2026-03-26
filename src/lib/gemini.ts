@@ -36,9 +36,9 @@ const schema: ResponseSchema = {
   },
 };
 
-// 使用する生成モデル（gemini-1.5-flash）の指定と設定を追加
+// 使用する生成モデル（gemini-2.0-flash-lite）の指定と設定を追加
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
+  model: "gemini-3.1-flash-lite-preview",
   generationConfig: {
     responseMimeType: "application/json",
     responseSchema: schema,
