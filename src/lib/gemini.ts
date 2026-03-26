@@ -40,7 +40,7 @@ export type Result = {
 }[];
 
 export async function generateGeminiText(text: string) {
-  const prompt  = `大学のレポートを読んで、文法や表現を修正してください。
+  const prompt = `大学のレポートを読んで、文法や表現を修正してください。
   # 添削条件
   
   以下の各項目について、0点から10点の整数範囲で評価し、その理由を記述してください。
