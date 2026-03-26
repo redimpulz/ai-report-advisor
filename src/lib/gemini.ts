@@ -1,50 +1,36 @@
-import {
-  GoogleGenerativeAI,
-  SchemaType,
-  type ResponseSchema,
-} from "@google/generative-ai";
+import { GoogleGenAI, Type, type Schema } from "@google/genai";
 
 // APIキーを.envファイルに記述した環境変数から取得。
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 // 生成AIを扱うクラスのインスタンスを作成
-const genAI = new GoogleGenerativeAI(API_KEY);
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 // レスポンスの定義を指定
-const schema: ResponseSchema = {
-  type: SchemaType.ARRAY,
+const schema: Schema = {
+  type: Type.ARRAY,
   items: {
-    type: SchemaType.OBJECT,
+    type: Type.OBJECT,
     nullable: false,
     properties: {
       name: {
-        type: SchemaType.STRING,
+        type: Type.STRING,
         nullable: false,
         description: "評価項目",
       },
       score: {
-        type: SchemaType.NUMBER,
+        type: Type.NUMBER,
         nullable: false,
         description: "評価点数。0から10の整数。",
       },
       reason: {
-        type: SchemaType.STRING,
+        type: Type.STRING,
         nullable: false,
         description: "評価理由。良い点と悪い点を明確に書く。Markdown。",
       },
     },
   },
 };
-
-// 使用する生成モデル（gemini-2.0-flash-lite）の指定と設定を追加
-const model = genAI.getGenerativeModel({
-  model: "gemini-3.1-flash-lite-preview",
-  generationConfig: {
-    responseMimeType: "application/json",
-    responseSchema: schema,
-    maxOutputTokens: 2000,
-  },
-});
 
 // 結果の型定義
 export type Result = {
@@ -54,7 +40,7 @@ export type Result = {
 }[];
 
 export async function generateGeminiText(text: string) {
-  const prompt = `大学のレポートを読んで、文法や表現を修正してください。
+  const prompt  = `大学のレポートを読んで、文法や表現を修正してください。
   # 添削条件
   
   以下の各項目について、0点から10点の整数範囲で評価し、その理由を記述してください。
@@ -72,6 +58,14 @@ export async function generateGeminiText(text: string) {
   \`\`\`
   `;
 
-  const result = await model.generateContent(prompt);
-  return JSON.parse(result.response.text()) as Result;
+  const result = await ai.models.generateContent({
+    model: "gemini-3.1-flash-lite-preview",
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: schema,
+      maxOutputTokens: 2000,
+    },
+  });
+  return JSON.parse(result.text!) as Result;
 }
